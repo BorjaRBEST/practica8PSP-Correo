@@ -2,7 +2,6 @@ package org.example;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-
 import java.util.Properties;
 
 public class EnviarCorreoGmail {
@@ -25,23 +24,33 @@ public class EnviarCorreoGmail {
                         return new PasswordAuthentication(username, password);
                     }
                 });
+        // Instanciamos un objeto de Menu para poder llamar a las funciones de la propia clase
+        Menu menu = new Menu();
+        String correoDestino = menu.obtenerCorreoDestino();// Solicitar correo al cuál mandar el mensaje
+        String asunto = menu.obtenerAsunto(); // Obtener el asunto del usuario
+        String mensaje = menu.obtenerMensaje();// Redactar mensaje
 
-        try {
-            // Crear un mensaje de correo
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("borjarodriguez203@gmail.com"));
-            message.setSubject("Prueba de Correo Práctica 8 PSP");
-            message.setText("Esto es un mensaje de prueba para que veas lo bueno que eres programando!");
+        Runnable enviarCorreo = () -> {
+            try {
+                // Crear un mensaje de correo
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(username));
+                message.setRecipients(Message.RecipientType.TO,
+                        InternetAddress.parse(correoDestino));
+                message.setSubject(asunto);
+                message.setText(mensaje);
 
-            // Enviar el mensaje
-            Transport.send(message);
+                // Enviar el mensaje
+                Transport.send(message);
 
-            System.out.println("El mensaje fue enviado con éxito.");
+                System.out.println("El mensaje fue enviado con éxito.");
 
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        };
+        // Creamos un hilo para asignarle la función de enviarCorreo
+        Thread thread = new Thread(enviarCorreo);
+        thread.start();
     }
 }
