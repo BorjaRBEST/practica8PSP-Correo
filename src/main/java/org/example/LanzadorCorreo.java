@@ -4,7 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
 
-public class EnviarCorreoGmail {
+public class LanzadorCorreo {
     public static void main(String[] args) {
         // Configurar las propiedades para la sesión de correo
         Properties props = new Properties();
@@ -24,6 +24,7 @@ public class EnviarCorreoGmail {
                         return new PasswordAuthentication(username, password);
                     }
                 });
+
         // Instanciamos un objeto de Menu para poder llamar a las funciones de la propia clase
         Menu menu = new Menu();
         String correoDestino = menu.obtenerCorreoDestino();// Solicitar correo al cuál mandar el mensaje
